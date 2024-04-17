@@ -66,14 +66,13 @@ jobs:
         # Set the Google Cloud project
         gcloud config set project ${{ secrets.GCP_PROJECT }}
         
-        REPO_NAME="${{ github.repository }}"
-        REPO_NAME="${REPO_NAME//\//_}"  # Replace '/' with '_'
-        REPO_NAME="${REPO_NAME,,}"  
+        REPO_NAME="${{ github.event.repository.name }}"
+        REPO_NAME="${REPO_NAME,,}"
 
         IMAGE_TAG="gcr.io/${{ secrets.GCP_PROJECT }}/${REPO_NAME}:${GITHUB_RUN_NUMBER}"
     
         # Submit the build to Google Cloud Build
-        gcloud builds submit --tag $IMAGE_TAG --verbosity=debug
+        gcloud builds submit --tag $IMAGE_TAG
     
         # Set the default region for Google Cloud Run deployments
         gcloud config set run/region us-central1
@@ -84,12 +83,11 @@ jobs:
 
     - name: Deploy to Google Cloud Run
       run: |
-        REPO_NAME="${{ github.repository }}"
-        REPO_NAME="${REPO_NAME//\//_}" 
+        REPO_NAME="${{ github.event.repository.name }}"
         REPO_NAME="${REPO_NAME,,}"  
-        IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT }}/${REPO_NAME}_${{ github.run_number }}"
+        IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT }}/${REPO_NAME}:${{ github.run_number }}"
         
-        gcloud run deploy ${REPO_NAME}_${{ github.run_number }} \
+        gcloud run deploy ${REPO_NAME} \
           --image $IMAGE_NAME \
           --platform managed \
           --allow-unauthenticated \
