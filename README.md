@@ -2,7 +2,7 @@
 date: 2024-04-17T21:49:08.748303
 author: AutoGPT <info@agpt.co>
 ---
-
+Aarushi testing in web editing
 # Invoice Generator
 
 To generate comprehensive and transparent invoices that cater to varying services, billable hours, parts used, different rates, and applicable taxes, you must integrate the following practices and information garnered from previous interactions: 
